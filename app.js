@@ -19,7 +19,7 @@ app.use('/auth', authRoutes)
 app.use('/post', postRoutes)
 
 app.get('/', (req, res) => {
-  res.send('Hello World! 4')
+  res.send('Welcome Post REST API')
 })
 
 mongoose.connect(process.env.DB_CONNECTION,{
