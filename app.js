@@ -3,12 +3,12 @@ const app = express()
 const mongoose = require('mongoose')
 const bodyParser = require ('body-parser')
 const cors = require('cors')
-require('dotenv/config')
+require('dotenv').config()
 
 app.use(bodyParser.urlencoded({
   extended: true
-}))
-app.use(bodyParser.json())
+}));
+app.use(bodyParser.json());
 app.use(cors())
 
 // import routes
@@ -36,6 +36,7 @@ db.on('error', console.error.bind(console,'Error establishing a database connect
 db.once('open',() => {
   console.log('Database is connected')
 })
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`)
 })

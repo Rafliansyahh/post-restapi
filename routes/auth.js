@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/User')
 
 // import validation
-const {reqisterValidation, LoginValidation, loginValidation} = require('../config/validation')
+const {loginValidation, registerValidation} = require('../config/validation')
 
 function result(succ, msg, details){
     if(details){
@@ -24,7 +24,7 @@ function result(succ, msg, details){
 
 // register
 router.post('/register', async (req, res)=>{
-    const {error} = reqisterValidation(req.body)
+    const {error} = registerValidation(req.body)
     if(error) return res.status(200).json(result(0, error.details[0].message))
 
     // username exist
@@ -37,7 +37,7 @@ router.post('/register', async (req, res)=>{
     const salt = await bcrypt.genSalt(10)
     const hashPassword = await bcrypt.hash(req.body.password, salt)
 
-    const user = new user({
+    const user = new User({
         username: req.body.username,
         password: hashPassword
     })

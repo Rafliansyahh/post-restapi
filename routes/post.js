@@ -1,12 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../models/Post')
-const { route } = require('./auth')
 
 function result(succ, msg, details){
     if(details){
         return{
-            succes: succ,
+            success: succ,
             message: msg,
             data: details 
         }
@@ -24,7 +23,7 @@ router.get('/', async(req, res) => {
             {
                 $lookup: {
                     from: 'user',
-                    localfield: 'user_id',
+                    localField: 'user_id',
                     foreignField: '_id',
                     as: 'userData'
                 }
@@ -32,21 +31,21 @@ router.get('/', async(req, res) => {
             {
                 $set:{
                     id: '$_id',
-                    username: {arrayElemAt: ['$userData.username',0]},
-                    create_date: {$dateToString: {Format: '%d-%m-%Y %H:%M:%S', date: '$created_date', timezone: '+07:00'}},
-                    modified_date: {$dateToString: {Format: '%d-%m-%Y %H:%M:%S', date: '$modified_date', timezone: '+07:00'}},
+                    username: {$arrayElemAt: ['$userData.username', 0]},
+                    created_date: {$dateToString: {format: '%d-%m-%Y %H:%M:%S', date: '$created_date', timezone: '+07:00'}},
+                    modified_date: {$dateToString: {format: '%d-%m-%Y %H:%M:%S', date: '$modified_date', timezone: '+07:00'}},
                 }
             },
             {
                 $project: {
-                    userData: 0,
-                    _id: 0
+                    userData:0,
+                    _id:0
                 }
             }
         ]);
         
         if (post.length > 0) {
-            res.status(200).json(result(1, 'Retieve Data Success!', post))
+            res.status(200).json(result(1, 'Retrieve Data Success!', post))
         } else{
             res.status(200).json(result(0, 'Zero Data!'))
         }
@@ -91,19 +90,20 @@ router.put('/', async (req,res) =>{
     }
 })
 
-router. delete('/',async (req,res) => {
+router.delete('/:id', async (req,res) => {
     try{
         const post = await Post.deleteOne({
             _id: req.params.id
         })
 
-        if(post.deleteCount > 0){
+        if (post.deletedCount > 0){
             res.status(200).json(result(1,'Delete Post Success!'))
-        } else{
+        }else{
             res.status(200).json(result(0,'Delete Post Failed!'))
         }
     }catch (error){
         res.status(500).json(result(0, error.message))
     }
 })
+
 module.exports = router
