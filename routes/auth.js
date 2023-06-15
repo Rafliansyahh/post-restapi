@@ -10,13 +10,13 @@ const {loginValidation, registerValidation} = require('../config/validation')
 function result(succ, msg, details){
     if(details){
         return{
-            succes: succ,
+            success: succ,
             message: msg,
             data: details 
         }
     } else{
         return{
-            succes: succ,
+            success: succ,
             message: msg
         }
     }
